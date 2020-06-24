@@ -3,27 +3,32 @@ const jimp = require('jimp')
 const fs = require('fs')
 const mosh = require('datamosh')
 
-module.exports.moshPNG = (imageURL, imageId, dataMode) => {
-    const imageJpgPath = `images/${imageId}.jpg`
-    let moshedImage
-    jimp.read(imageURL, (err, image) => {
-        if (err) console.error(err)
-        else {
-            image.write(imageJpgPath)
-            const imagePath = `images/${imageId}.jpg`
-            const moshedImagePath = `images/moshed_${imageId}.jpg`
-            mosh({ read: imagePath, write: moshedImagePath, mode: dataMode }, (err, data) => {
-                if (err) console.error(err)
-                else {
-                    console.log('data', data)
-                    moshedImage = data
-                }
-            })
-            fs.unlink(imagePath, (err) => {
-                if (err) console.error(`err -> ${err} \n ${imagePath} not deleted`)
-                else console.log(`${imagePath} succesfully deleted.`)
-            })
-        }
+const readPNG = async (url, imageId) => {
+    try {
+        const readImage = await jimp.read(url)
+        await readImage.writeAsync(`images/${imageId}.jpg`)
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const moshImage = async (imageId, dataMode) => {
+    return new Promise((resolve, reject) => {
+        mosh({
+            read: `images/${imageId}.jpg`,
+            write: `images/moshed_${imageId}.jpg`,
+            dataMode: dataMode
+        }, (error) => {
+            if (error) reject(error)
+            else {
+                fs.unlinkSync(`images/${imageId}.jpg`)
+                resolve()
+            }
+        })
     })
-    return moshedImage
+}
+
+module.exports = {
+    readPNG,
+    moshImage
 }
