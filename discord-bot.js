@@ -28,6 +28,7 @@ bot.registerCommand('dm', async (msg, args) => {
                 file: fs.readFileSync(`images/moshed_${attachment.id}.jpg`),
                 name: `moshed_${attachment.id}.jpg`
             })
+            console.log('File sent!')
             fs.unlinkSync(`images/moshed_${attachment.id}.jpg`)
         } catch (e) {
             console.log(e)
@@ -38,6 +39,17 @@ bot.registerCommand('dm', async (msg, args) => {
 }, {
     description: 'Use Datamosh to mosh a lame image into a SCHIFTY pic!',
 
+})
+
+bot.registerCommand('tic', async (msg, args) => {
+    console.log(msg.author)
+    bot.createMessage(msg.channel.id, `<@${msg.author.id}>! Who will challenge you to Tic Tac Toe?`)
+    const userStart = msg.author
+    bot.registerCommand('tac', (msg, args) => {
+        bot.createMessage(msg.channel.id, `<@${msg.author.id}>! <@${userStart.id}> your challenger has appeared!`)
+    })
+}, {
+    description: 'Play a game of Tic Tac Toe!'
 })
 
 bot.connect()
