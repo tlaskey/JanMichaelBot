@@ -127,6 +127,15 @@ bot.registerCommand('tac', (msg, args) => {
             return bot.createMessage(msg.channel.id, 'Your game has been stopped!')
         }
     }
+    if (args[0] == 'help') {
+        bot.createMessage(msg.channel.id, `
+!tac start - Start a new game of Tic Tac Toe!
+!tac accept - Accept the challenge and initialize a new game
+!tac move [row] [col] - Move a piece to specified (x, y). Valid moves are numbers from 0-2.
+!tac quit - Quit and end the game.
+!tac help - Display commands and their usage.
+        `)
+    }
 }, {
     description: 'Play a game of Tic Tac Toe!'
 })
