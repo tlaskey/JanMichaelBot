@@ -1,5 +1,9 @@
 class Board {
-    constructor() {
+    constructor(playerOneID, playerTwoID) {
+        this.players = new Map()
+        this.players.set(playerOneID, 'x')
+        this.players.set(playerTwoID, 'o')
+        this.playerTurn = playerOneID
         this.board = new Array(3)
         this.moveCount = 0
         for (let i = 0; i < this.board.length; i++) {
@@ -13,6 +17,13 @@ class Board {
             for (let j = 0; j < this.board.length; j++) {
                 this.board[i][j] = '-'
             }
+        }
+    }
+
+    getOpponent(userID) {
+        for (let id of this.players.keys()) {
+            console.log(id, userID)
+            if (id != userID) return id
         }
     }
 

@@ -5,6 +5,8 @@ const Eris = require('eris')
 const fs = require('fs')
 const Board = require('./TicTacToe')
 
+const GLOBAL_BOARDS = new Map()
+
 const bot = new Eris.CommandClient(process.env.DISCORD_TOKEN, {}, {
     description: 'The JanMichaelVincent Bot',
     owner: "Tyler Laskey",
@@ -42,58 +44,89 @@ bot.registerCommand('dm', async (msg, args) => {
 
 })
 
-bot.registerCommand('tic', async (msg, args) => {
-    bot.createMessage(msg.channel.id, `<@${msg.author.id}>! Who will challenge you to Tic Tac Toe?`)
 
-    const userStart = msg.author
-    bot.registerCommand('tac', (msg, args) => {
-        const challenger = msg.author
-        bot.createMessage(msg.channel.id, `<@${challenger.id}>! <@${userStart.id}> your challenger has appeared!`)
+let userStart
+let userChallenger
 
-        let gameBoard = new Board()
-        bot.createMessage(msg.channel.id, `<@${userStart.id}> is X's and goes first! ` + gameBoard.displayBoard())
-
-        let players = {
-            one: {
-                info: userStart,
-                type: 'x'
-            },
-            two: {
-                info: challenger,
-                type: 'o'
-            }
+bot.registerCommand('tac', (msg, args) => {
+    if (args[0] == 'start') {
+        if (!userStart) {
+            userStart = msg.author
+            if (GLOBAL_BOARDS.has(userStart.id)) return bot.createMessage(msg.channel.id, `<@${userStart.id}> already has a game running!`)
+            bot.createMessage(msg.channel.id, `<@${userStart.id}> has started a game of Tic Tac Toe! Who would like to challenge? Use '!tac accept' to start.`)
         }
+        else return bot.createMessage(msg.channel.id, 'A game is already being started! Use !tac accept to be second player.')
+    }
+    if (args[0] == 'accept') {
+        if (userStart) {
+            userChallenger = msg.author
+            if (userStart.id == userChallenger.id) return bot.createMessage(msg.channel.id, 'You cannot play against yourself!')
 
-        let currentPlayer
-        let playerTurn = true
-        bot.registerCommand('move', (msg, args) => {
+            if (GLOBAL_BOARDS.has(userChallenger.id)) return bot.createMessage(msg.channel.id, `<@${userChallenger.id}> is already in a game!`)
 
-            if (playerTurn) currentPlayer = players.one
-            else currentPlayer = players.two
+            bot.createMessage(msg.channel.id, `<@${userChallenger.id}> has accepted the challenge!`)
 
-            const xPos = Number(args[0])
-            const yPos = Number(args[1])
+            let gameBoard = new Board(userStart.id, userChallenger.id)
+            GLOBAL_BOARDS.set(userStart.id, gameBoard)
+            GLOBAL_BOARDS.set(userChallenger.id, gameBoard)
 
-            if (msg.author.id == currentPlayer.info.id) {
-                if (isNaN(xPos) || isNaN(yPos)) return bot.createMessage(msg.channel.id, 'Invalid move parameters.')
+            bot.createMessage(msg.channel.id, `<@${userStart.id}> is X's and goes first! ` + gameBoard.displayBoard())
 
+            userStart = undefined
+            userChallenger = undefined
+        }
+    }
+    if (args[0] == 'move') {
+        let gameBoard
+        let user = msg.author
+
+        if (GLOBAL_BOARDS.has(user.id)) gameBoard = GLOBAL_BOARDS.get(user.id)
+        else return bot.createMessage(msg.channel.id, `<@${user.id}>. You do not have a game running. Use '!tac start' to start a game.`)
+
+        if (args[1] && args[2]) {
+            let xPos = Number(args[1])
+            let yPos = Number(args[2])
+            if (isNaN(xPos) || isNaN(yPos)) return bot.createMessage(msg.channel.id, 'Invalid argument types. xPos and yPos must be numbers.')
+
+            if (gameBoard.playerTurn == user.id) {
                 bot.createMessage(msg.channel.id, 'You gave me a move!')
-                bot.createMessage(msg.channel.id, gameBoard.updateBoard(xPos, yPos, currentPlayer.type))
 
-                if (gameBoard.hasWinner(xPos, yPos, currentPlayer.type)) {
-                    bot.createMessage(msg.channel.id, `<@${currentPlayer.info.id}> won!`)
+                try {
+                    bot.createMessage(msg.channel.id, gameBoard.updateBoard(xPos, yPos, gameBoard.players.get(user.id)))
+                } catch (e) {
+                    return bot.createMessage(msg.channel.id, e.toString())
                 }
-                else if (gameBoard.hasDraw()) {
-                    bot.createMessage(msg.channel.id, 'It is a tie! Start a new game with !tic')
+
+                const opponentID = gameBoard.getOpponent(user.id)
+                gameBoard.playerTurn = opponentID
+
+                if (gameBoard.hasWinner(xPos, yPos, gameBoard.players.get(user.id))) {
+                    GLOBAL_BOARDS.delete(user.id)
+                    GLOBAL_BOARDS.delete(opponentID)
+                    return bot.createMessage(msg.channel.id, `<@${user.id}> has won!`)
                 }
-                else {
-                    bot.createMessage(msg.channel.id, `<@${currentPlayer.info.id}> has placed a ${currentPlayer.type} at row: ${xPos}, col: ${yPos}!`)
+                if (gameBoard.hasDraw()) {
+                    GLOBAL_BOARDS.delete(user.id)
+                    GLOBAL_BOARDS.delete(opponentID)
+                    return bot.createMessage(msg.channel.id, 'There has been a tie!')
                 }
-                playerTurn = !playerTurn
+                return bot.createMessage(msg.channel.id, `<@${user.id}> has placed a ${gameBoard.players.get(user.id)} at row: ${xPos}, col: ${yPos}!`)
             }
-            else bot.createMessage(msg.channel.id, 'It is not your turn!')
-        })
-    })
+
+            else return bot.createMessage(msg.channel.id, 'It is not your turn!')
+        }
+        else return bot.createMessage(msg.channel.id, 'Invalid arguments. Use \'!tac move xPos yPos\' to make a move.')
+    }
+    if (args[0] == 'quit') {
+        if (GLOBAL_BOARDS.has(msg.author.id)) {
+            const gameBoard = GLOBAL_BOARDS.get(msg.author.id)
+            const opponentID = gameBoard.getOpponent(msg.author.id)
+            GLOBAL_BOARDS.delete(msg.author.id)
+            GLOBAL_BOARDS.delete(opponentID)
+
+            return bot.createMessage(msg.channel.id, 'Your game has been stopped!')
+        }
+    }
 }, {
     description: 'Play a game of Tic Tac Toe!'
 })
