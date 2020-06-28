@@ -24,6 +24,7 @@ bot.registerCommand('dm', async (msg, args) => {
         if (args.length > 0) {
             dataMode = args[0]
         }
+        bot.deleteMessage(msg.channel.id, msg.id)
         try {
             await readPNG(attachment.url, attachment.id)
             await moshImage(attachment.id, dataMode)
@@ -43,7 +44,6 @@ bot.registerCommand('dm', async (msg, args) => {
     description: 'Use Datamosh to mosh a lame image into a SCHIFTY pic!',
 
 })
-
 
 let userStart
 let userChallenger
