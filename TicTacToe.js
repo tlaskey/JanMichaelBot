@@ -1,6 +1,7 @@
 class Board {
     constructor() {
         this.board = new Array(3)
+        this.moveCount = 0
         for (let i = 0; i < this.board.length; i++) {
             this.board[i] = new Array(3)
         }
@@ -15,22 +16,52 @@ class Board {
         }
     }
 
-    isFinished() {
-        return false
-    }
+    hasWinner(x, y, type) {
+        const board = this.board
+        let n = board.length
+        // Only need to check horizontal, vertical, and diagonals based off x, y
 
-    hasWinner() {
+        // check row
+        for (let col = 0; col < n; col++) {
+            if (board[x][col] != type) break
+            if (col == n - 1) return true
+        }
+
+        // check col
+        for (let row = 0; row < n; row++) {
+            if (board[row][y] != type) break
+            if (row == n - 1) return true
+        }
+
+        // check diag
+        if (x == y) {
+            for (let i = 0; i < n; i++) {
+                if (board[i][i] != type) break
+                if (i == n - 1) return true
+            }
+        }
+
+        // check anti-diag
+        if (x + y == n - 1) {
+            for (let i = 0; i < n; i++) {
+                if (board[i][(n - 1) - i] != type) break
+                if (i == n - 1) return true
+            }
+        }
         return false
     }
 
     hasDraw() {
-        return false
+        return this.moveCount == 9
     }
 
     updateBoard(row, col, value) {
         if (row < 0 || row >= this.board.length) throw new Error('Row index out of bounds')
         if (col < 0 || col >= this.board[0].length) throw new Error('Col index out of bounds')
-        if (this.board[row][col] == '-') this.board[row][col] = value
+        if (this.board[row][col] == '-') {
+            this.board[row][col] = value
+            this.moveCount++
+        }
         else throw new Error('Invalid move!')
         return this.displayBoard()
     }

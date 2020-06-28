@@ -64,30 +64,34 @@ bot.registerCommand('tic', async (msg, args) => {
             }
         }
 
-        // Need to figure out how to store who's turn it currently is.
-        let currentMove = players.one
-        bot.on('messageCreate', (msg) => {
-            if (msg.content.startsWith('!move')) {
-                if (msg.author.id == currentMove.info.id) {
-                    const msgArray = msg.content.split(' ')
+        let currentPlayer
+        let playerTurn = true
+        bot.registerCommand('move', (msg, args) => {
 
-                    bot.createMessage(msg.channel.id, 'You gave me a move!')
-                    bot.createMessage(msg.channel.id, gameBoard.updateBoard(msgArray[1], msgArray[2], currentMove.type))
+            if (playerTurn) currentPlayer = players.one
+            else currentPlayer = players.two
 
-                    if (gameBoard.hasWinner()) {
-                        bot.createMessage(msg.channel.id, `<@${currentMove.info.id}> won!`)
-                    }
-                    else if (gameBoard.hasDraw()) {
-                        bot.createMessage(msg.channel.id, 'It is a tie! Start a new game with !tic')
-                    }
-                    else {
+            const xPos = Number(args[0])
+            const yPos = Number(args[1])
 
-                        bot.createMessage(msg.channel.id, `<@${currentMove.info.id}> has placed a ${currentMove.type} at row: ${msgArray[1]}, col: ${msgArray[2]}!`)
-                    }
+            if (msg.author.id == currentPlayer.info.id) {
+                if (isNaN(xPos) || isNaN(yPos)) return bot.createMessage(msg.channel.id, 'Invalid move parameters.')
+
+                bot.createMessage(msg.channel.id, 'You gave me a move!')
+                bot.createMessage(msg.channel.id, gameBoard.updateBoard(xPos, yPos, currentPlayer.type))
+
+                if (gameBoard.hasWinner(xPos, yPos, currentPlayer.type)) {
+                    bot.createMessage(msg.channel.id, `<@${currentPlayer.info.id}> won!`)
                 }
-                else 'It is not your turn!'
+                else if (gameBoard.hasDraw()) {
+                    bot.createMessage(msg.channel.id, 'It is a tie! Start a new game with !tic')
+                }
+                else {
+                    bot.createMessage(msg.channel.id, `<@${currentPlayer.info.id}> has placed a ${currentPlayer.type} at row: ${xPos}, col: ${yPos}!`)
+                }
+                playerTurn = !playerTurn
             }
-            else 'You need to make a move with !move [row] [col]'
+            else bot.createMessage(msg.channel.id, 'It is not your turn!')
         })
     })
 }, {
