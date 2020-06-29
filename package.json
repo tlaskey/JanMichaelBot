@@ -10,9 +10,11 @@
   "author": "Tyler Laskey <tlaskey3@gmail.com> (https://github.com/Tlaskey)",
   "license": "MIT",
   "dependencies": {
+    "cron": "^1.8.2",
     "datamosh": "^1.0.0",
     "dotenv": "^8.2.0",
     "eris": "^0.11.2",
-    "jimp": "^0.10.0"
+    "jimp": "^0.10.0",
+    "moment": "^2.27.0"
   }
 }
