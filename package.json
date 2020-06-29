@@ -1,8 +1,8 @@
 {
   "name": "janmichaelbot",
   "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A Discord bot for the JanMichaelVincent Server!",
+  "main": "discord-bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,8 +12,7 @@
   "dependencies": {
     "cron": "^1.8.2",
     "datamosh": "^1.0.0",
-    "dotenv": "^8.2.0",
-    "eris": "^0.11.2",
+    "discord.js": "^12.2.0",
     "jimp": "^0.10.0",
     "moment": "^2.27.0"
   }
