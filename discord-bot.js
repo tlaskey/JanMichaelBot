@@ -147,6 +147,9 @@ bot.registerCommand('remind', (msg, args) => {
         `)
     }
 
+    if (!args[0] || !args[1] || !args[2]) return bot.createMessage(msg.channel.id, 'You must specify a time, time unit, and message. Run "!remind help" for example usage.')
+    if (!args[2].startsWith("\"") || !args[2].endsWith("\"")) return bot.createMessage(msg.channel.id, 'Message must be surrounded by \"" e.g. "Let the dog out!"')
+
     let now = require('moment')()
     let numTime = args[0]
     let timeUnit = args[1]
@@ -161,6 +164,7 @@ bot.registerCommand('remind', (msg, args) => {
     })
 
     console.log(`Starting cron job... reminder will execute on ${remindTime}`)
+
     job.start()
 }, {
     description: 'Set a reminder to get something done on time!'
