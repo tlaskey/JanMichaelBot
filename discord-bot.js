@@ -20,18 +20,19 @@ client.on('ready', () => {
 
 client.on('message', (msg) => {
     if (!msg.content.startsWith(prefix) || msg.author.bot) return
-
-    const args = msg.content.slice(prefix.length).split(/ +/)
+    let args = msg.content.slice(prefix.length).split(/ +/)
     const command = args.shift().toLowerCase()
 
     if (command === 'remind') {
-        client.commands.get('remind').execute(msg, args)
+        // https://stackoverflow.com/questions/4031900/split-a-string-by-whitespace-keeping-quoted-segments-allowing-escaped-quotes
+        args = msg.content.slice(prefix.length).match(/\w+|"(?:\\"|[^"])+"/g)
+        client.commands.get(command).execute(msg, args)
     }
     else if (command === 'dm') {
-        client.commands.get('dm').execute(msg, args)
+        client.commands.get(command).execute(msg, args)
     }
     else if (command === 'tac') {
-        client.commands.get('tac').execute(msg, args)
+        client.commands.get(command).execute(msg, args)
     }
 })
 
