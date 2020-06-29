@@ -140,4 +140,30 @@ bot.registerCommand('tac', (msg, args) => {
     description: 'Play a game of Tic Tac Toe!'
 })
 
+bot.registerCommand('remind', (msg, args) => {
+    if (args[0] == 'help') {
+        return bot.createMessage(msg.channel.id, `
+        Command syntax: !remind <number> <s|m|h|d|m|w> "<message>" \nExample: !remind 30 m "Go let the dog out!"
+        `)
+    }
+
+    let now = require('moment')()
+    let numTime = args[0]
+    let timeUnit = args[1]
+    let remindTime = now.add(numTime, timeUnit)
+
+    bot.createMessage(msg.channel.id, `I will remind you on: ${remindTime}. With the message ${args[2]}`)
+
+    let CronJob = require('cron').CronJob
+    let job = new CronJob(remindTime, () => {
+        console.log('reminder sent!')
+        bot.createMessage(msg.channel.id, `<@${msg.author.id}> Here is your reminder: \n ${args[2]}`)
+    })
+
+    console.log(`Starting cron job... reminder will execute on ${remindTime}`)
+    job.start()
+}, {
+    description: 'Set a reminder to get something done on time!'
+})
+
 bot.connect()
