@@ -1,7 +1,7 @@
-const jimp = require('jimp')
 const fs = require('fs')
 const mosh = require('datamosh')
 const Path = require('path')
+const jimp = require('jimp')
 
 const readPNG = async (url, imageId) => {
     try {
