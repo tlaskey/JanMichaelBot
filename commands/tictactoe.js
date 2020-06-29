@@ -1,4 +1,4 @@
-const Board = require('../utils/TicTacToe')
+const Board = require('../utils/board')
 const Eris = require('eris')
 
 const GLOBAL_BOARDS = new Map()
@@ -12,7 +12,7 @@ const tictactoe = new Eris.Command('tac', (msg, args) => {
         if (!userStart) {
             userStart = msg.author
             if (GLOBAL_BOARDS.has(userStart.id)) return bot.createMessage(msg.channel.id, `<@${userStart.id}> already has a game running!`)
-            bot.createMessage(msg.channel.id, `<@${userStart.id}> has started a game of Tic Tac Toe! Who would like to challenge? Use '!tac accept' to start.`)
+            return bot.createMessage(msg.channel.id, `<@${userStart.id}> has started a game of Tic Tac Toe! Who would like to challenge? Use '!tac accept' to start.`)
         }
         else return bot.createMessage(msg.channel.id, 'A game is already being started! Use !tac accept to be second player.')
     }
