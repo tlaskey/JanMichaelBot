@@ -1,5 +1,5 @@
 const Board = require('../utils/board')
-const embedHelp = require('../utils/embeds/bot-message-embed')
+const HelpMessageEmbed = require('../utils/embeds/help-message-embed')
 
 const GLOBAL_BOARDS = new Map()
 
@@ -89,7 +89,7 @@ module.exports = {
             }
         }
         if (args[0] == 'help') {
-            embedHelp
+            const embedHelp = new HelpMessageEmbed()
                 .addField('!tac start', 'Start a new game of Tic Tac Toe!')
                 .addField('!tac accept', 'Accept the challenge and initialize a new game.')
                 .addField('!tac move [row] [col]', 'Valid moves are from 0-2.')

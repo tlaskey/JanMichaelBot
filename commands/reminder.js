@@ -1,11 +1,12 @@
-const embedHelp = require('../utils/embeds/bot-message-embed')
+const HelpMessageEmbed = require('../utils/embeds/help-message-embed')
 
 module.exports = {
     name: 'remind',
     description: 'Set a reminder to get something done on time!',
     execute(msg, args) {
         if (args[1] == 'help') {
-            embedHelp.addField('!remind [numTime] [unit] "[message]"', 'Example: !remind 1 h "Let Anna outside!"')
+            const embedHelp = new HelpMessageEmbed()
+                .addField('!remind [numTime] [unit] "[message]"', 'Example: !remind 1 h "Let Anna outside!"')
 
             return msg.channel.send(embedHelp)
         }

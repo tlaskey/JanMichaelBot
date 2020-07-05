@@ -1,14 +1,15 @@
 const fs = require('fs')
 const { readPNG, moshImage } = require('../utils/util')
 const Path = require('path')
-const embedHelp = require('../utils/embeds/bot-message-embed')
+const HelpMessageEmbed = require('../utils/embeds/help-message-embed')
 
 module.exports = {
     name: 'dm',
     description: 'Use Datamosh to mosh a lame image into a SCHIFTY pic!',
     async execute(msg, args) {
         if (args[0] === 'help') {
-            embedHelp.addField('!dm [mode]', 'modes: blurbobb, schifty, veneneux, vana, fatcat')
+            const embedHelp = new HelpMessageEmbed()
+                .addField('!dm [mode]', 'modes: blurbobb, schifty, veneneux, vana, fatcat')
 
             return msg.channel.send(embedHelp)
         }
