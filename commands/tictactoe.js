@@ -76,7 +76,7 @@ module.exports = {
 
                 else return msg.channel.send('It is not your turn!')
             }
-            else return msg.channel.send('Invalid arguments. Use \'!tac move xPos yPos\' to make a move.')
+            else return msg.channel.send('Invalid arguments. Use \'!tac move [row] [col]\' to make a move.')
         }
         if (args[0] == 'quit') {
             if (GLOBAL_BOARDS.has(msg.author.id)) {

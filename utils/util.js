@@ -8,7 +8,6 @@ const readPNG = async (url, imageId) => {
         const readImage = await jimp.read(url)
         await readImage.writeAsync(`images/${imageId}.png`)
     } catch (e) {
-        console.log('error url', url)
         console.log(e)
     }
 }

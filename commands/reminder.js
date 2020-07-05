@@ -23,6 +23,7 @@ module.exports = {
         msg.channel.send(`I will remind you on: ${remindTime}. With the message ${args[3]}`)
 
         let CronJob = require('cron').CronJob
+
         let job = new CronJob(remindTime, () => {
             console.log('reminder sent!')
             msg.channel.send(`<@${msg.author.id}> Here is your reminder: \n ${args[3]}`)
