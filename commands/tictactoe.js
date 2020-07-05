@@ -1,4 +1,5 @@
 const Board = require('../utils/board')
+const Discord = require('discord.js')
 
 const GLOBAL_BOARDS = new Map()
 
@@ -88,13 +89,18 @@ module.exports = {
             }
         }
         if (args[0] == 'help') {
-            msg.channel.send(`
-!tac start - Start a new game of Tic Tac Toe!
-!tac accept - Accept the challenge and initialize a new game
-!tac move [row] [col] - Move a piece to specified (x, y). Valid moves are numbers from 0-2.
-!tac quit - Quit and end the game.
-!tac help - Display commands and their usage.
-            `)
+            const embedHelp = new Discord.MessageEmbed()
+                .setColor('#F727B5')
+                .setTitle('JanMichaelBot Help')
+                .addField('!tac start', 'Start a new game of Tic Tac Toe!')
+                .addField('!tac accept', 'Accept the challenge and initialize a new game.')
+                .addField('!tac move [row] [col]', 'Valid moves are from 0-2.')
+                .addField('!tac quit', 'Quit the game. Loser!')
+                .addField('!tac help', 'Display commands and their usage.')
+                .setThumbnail('https://vignette.wikia.nocookie.net/rickandmorty/images/0/07/S2e8_Jan.png/')
+                .setTimestamp()
+
+            msg.channel.send(embedHelp)
         }
     }
 }
