@@ -1,28 +1,37 @@
 const fs = require('fs')
 const { readPNG, moshImage } = require('../utils/util')
 const Path = require('path')
+const embedHelp = require('../utils/embeds/bot-message-embed')
 
 module.exports = {
     name: 'dm',
     description: 'Use Datamosh to mosh a lame image into a SCHIFTY pic!',
     async execute(msg, args) {
+        if (args[0] === 'help') {
+            embedHelp.addField('!dm [mode]', 'modes: blurbobb, schifty, veneneux, vana, fatcat')
+
+            return msg.channel.send(embedHelp)
+        }
+
         const attachment = msg.attachments.first()
+
         if (attachment) {
-            console.log(attachment)
-            let dataMode
-            if (args.length > 0) {
-                dataMode = args[0]
-            }
+            let dataMode = args[0]
+
             try {
                 await readPNG(attachment.url, attachment.id)
                 await moshImage(attachment.id, dataMode)
-                const path = Path.join(`images/moshed_${attachment.id}.jpg`)
-                await msg.channel.send('moshed image!', {
+
+                const path = Path.join(`images/moshed_${attachment.id}.png`)
+                const mode = (dataMode === undefined) ? 'random' : dataMode
+
+                await msg.channel.send(`moshed image in ${mode} mode!`, {
                     files: [{
                         attachment: path,
-                        name: `moshed_${attachment.id}.jpg`
+                        name: `moshed_${attachment.id}.png`
                     }]
                 })
+
                 console.log('File sent!')
                 fs.unlinkSync(path)
                 await msg.delete()

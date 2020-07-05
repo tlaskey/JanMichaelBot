@@ -1,4 +1,5 @@
 const Board = require('../utils/board')
+const embedHelp = require('../utils/embeds/bot-message-embed')
 
 const GLOBAL_BOARDS = new Map()
 
@@ -75,7 +76,7 @@ module.exports = {
 
                 else return msg.channel.send('It is not your turn!')
             }
-            else return msg.channel.send('Invalid arguments. Use \'!tac move xPos yPos\' to make a move.')
+            else return msg.channel.send('Invalid arguments. Use \'!tac move [row] [col]\' to make a move.')
         }
         if (args[0] == 'quit') {
             if (GLOBAL_BOARDS.has(msg.author.id)) {
@@ -88,13 +89,14 @@ module.exports = {
             }
         }
         if (args[0] == 'help') {
-            msg.channel.send(`
-!tac start - Start a new game of Tic Tac Toe!
-!tac accept - Accept the challenge and initialize a new game
-!tac move [row] [col] - Move a piece to specified (x, y). Valid moves are numbers from 0-2.
-!tac quit - Quit and end the game.
-!tac help - Display commands and their usage.
-            `)
+            embedHelp
+                .addField('!tac start', 'Start a new game of Tic Tac Toe!')
+                .addField('!tac accept', 'Accept the challenge and initialize a new game.')
+                .addField('!tac move [row] [col]', 'Valid moves are from 0-2.')
+                .addField('!tac quit', 'Quit the game. Loser!')
+                .addField('!tac help', 'Display commands and their usage.')
+
+            msg.channel.send(embedHelp)
         }
     }
 }
