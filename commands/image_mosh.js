@@ -1,19 +1,14 @@
 const fs = require('fs')
 const { readPNG, moshImage } = require('../utils/util')
 const Path = require('path')
-const Discord = require('discord.js')
+const embedHelp = require('../utils/embeds/bot-message-embed')
 
 module.exports = {
     name: 'dm',
     description: 'Use Datamosh to mosh a lame image into a SCHIFTY pic!',
     async execute(msg, args) {
         if (args[0] === 'help') {
-            const embedHelp = new Discord.MessageEmbed()
-                .setColor('#F727B5')
-                .setTitle('JanMichaelBot Help')
-                .addField('!dm [mode]', 'modes: blurbobb, schifty, veneneux, vana, fatcat')
-                .setThumbnail('https://vignette.wikia.nocookie.net/rickandmorty/images/0/07/S2e8_Jan.png/')
-                .setTimestamp()
+            embedHelp.addField('!dm [mode]', 'modes: blurbobb, schifty, veneneux, vana, fatcat')
 
             return msg.channel.send(embedHelp)
         }

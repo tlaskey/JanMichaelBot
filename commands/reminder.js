@@ -1,16 +1,12 @@
-const Discord = require('discord.js')
+const embedHelp = require('../utils/embeds/bot-message-embed')
 
 module.exports = {
     name: 'remind',
     description: 'Set a reminder to get something done on time!',
     execute(msg, args) {
         if (args[1] == 'help') {
-            const embedHelp = new Discord.MessageEmbed()
-                .setColor('#F727B5')
-                .setTitle('JanMichaelBot Help')
-                .addField('!remind [numTime] [unit] "[message]"', 'Example: !remind 1 h "Let Anna outside!"')
-                .setThumbnail('https://vignette.wikia.nocookie.net/rickandmorty/images/0/07/S2e8_Jan.png/')
-                .setTimestamp()
+            embedHelp.addField('!remind [numTime] [unit] "[message]"', 'Example: !remind 1 h "Let Anna outside!"')
+
             return msg.channel.send(embedHelp)
         }
 
