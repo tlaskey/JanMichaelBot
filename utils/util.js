@@ -6,7 +6,7 @@ const jimp = require('jimp')
 const readPNG = async (url, imageId) => {
     try {
         const readImage = await jimp.read(url)
-        await readImage.writeAsync(`images/${imageId}.jpg`)
+        await readImage.writeAsync(`images/${imageId}.png`)
     } catch (e) {
         console.log('error url', url)
         console.log(e)
@@ -15,8 +15,8 @@ const readPNG = async (url, imageId) => {
 
 const moshImage = async (imageId, dataMode) => {
     return new Promise((resolve, reject) => {
-        const read = Path.join('./', `images/${imageId}.jpg`)
-        const write = Path.join('./', `images/moshed_${imageId}.jpg`)
+        const read = Path.join('./', `images/${imageId}.png`)
+        const write = Path.join('./', `images/moshed_${imageId}.png`)
         mosh({
             read,
             write,
@@ -24,7 +24,7 @@ const moshImage = async (imageId, dataMode) => {
         }, (error) => {
             if (error) reject(error)
             else {
-                fs.unlinkSync(`images/${imageId}.jpg`)
+                fs.unlinkSync(`images/${imageId}.png`)
                 resolve()
             }
         })
