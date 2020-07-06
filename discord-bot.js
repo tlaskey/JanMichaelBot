@@ -39,6 +39,8 @@ client.on('message', (msg) => {
 
 let token
 
+console.log(process.env.NODE_ENV)
+
 if (process.env.NODE_ENV === 'production') {
     token = process.env.DISCORD_TOKEN
 }
