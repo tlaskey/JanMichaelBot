@@ -1,6 +1,7 @@
 const fs = require('fs')
 const Discord = require('discord.js')
-const { prefix } = require('./config.json')
+
+const prefix = '!'
 
 const client = new Discord.Client()
 
