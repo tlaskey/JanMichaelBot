@@ -4,7 +4,7 @@
   "description": "A Discord bot for the JanMichaelVincent Server!",
   "main": "discord-bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "echo \"Running Lint...\" && standard --verbose && echo \"Lint Successful!\""
   },
   "keywords": [],
   "author": "Tyler Laskey <tlaskey3@gmail.com> (https://github.com/Tlaskey)",
