@@ -1,6 +1,6 @@
 const fs = require('fs')
 const Discord = require('discord.js')
-const { prefix, token } = require('./config.json')
+const { prefix } = require('./config.json')
 
 const client = new Discord.Client()
 
@@ -35,5 +35,12 @@ client.on('message', (msg) => {
         client.commands.get(command).execute(msg, args)
     }
 })
+
+let token
+
+if (process.env.NODE_ENV === 'production') {
+    token = process.env.DISCORD_TOKEN
+}
+else token = require('./config.json').token
 
 client.login(token)
