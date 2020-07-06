@@ -1,6 +1,4 @@
-const fs = require('fs')
-const { readPNG, moshImage } = require('../utils/util')
-const Path = require('path')
+const moshImage = require('../utils/util')
 const HelpMessageEmbed = require('../utils/embeds/help-message-embed')
 
 module.exports = {
@@ -20,21 +18,19 @@ module.exports = {
             let dataMode = args[0]
 
             try {
-                await readPNG(attachment.url, attachment.id)
-                await moshImage(attachment.id, dataMode)
+                const moshedImage = await moshImage(attachment.url, dataMode)
 
-                const path = Path.join(`images/moshed_${attachment.id}.png`)
                 const mode = (dataMode === undefined) ? 'random' : dataMode
 
                 await msg.channel.send(`moshed image in ${mode} mode!`, {
                     files: [{
-                        attachment: path,
+                        attachment: moshedImage,
                         name: `moshed_${attachment.id}.png`
                     }]
                 })
 
                 console.log('File sent!')
-                fs.unlinkSync(path)
+
                 await msg.delete()
             } catch (e) {
                 console.log(e)
