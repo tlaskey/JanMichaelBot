@@ -1,12 +1,17 @@
 {
   "name": "janmichaelbot",
-  "version": "1.0.0",
-  "description": "A Discord bot for the JanMichaelVincent Server!",
+  "version": "1.1.0",
+  "description": "A Discord bot for the JanMichaelVincent Discord Server!",
   "main": "discord-bot.js",
   "scripts": {
     "lint": "echo \"Running Lint...\" && standard --verbose && echo \"Lint Successful!\""
   },
-  "keywords": [],
+  "keywords": [
+    "discord.js",
+    "datamosh",
+    "node.js",
+    "discord bot"
+  ],
   "author": "Tyler Laskey <tlaskey3@gmail.com> (https://github.com/Tlaskey)",
   "license": "MIT",
   "dependencies": {
