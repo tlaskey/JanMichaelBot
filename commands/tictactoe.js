@@ -10,7 +10,7 @@ let lastBoardMessage
 module.exports = {
   name: 'tac',
   description: 'Play a game of Tic Tac Toe!',
-  async execute(msg, args) {
+  async execute (msg, args) {
     if (args[0] === 'start') {
       if (!userStart) {
         userStart = msg.author

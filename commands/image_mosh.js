@@ -6,7 +6,7 @@ const BaseMessageEmbed = require('../utils/embeds/base-message-embed')
 module.exports = {
   name: 'dm',
   description: 'Use Datamosh to mosh a lame image into a SCHIFTY pic!',
-  async execute(msg, args) {
+  async execute (msg, args) {
     if (args[0] === 'help') {
       const embedHelp = new BaseMessageEmbed()
         .addField('!dm mode', 'modes: blurbobb, schifty, veneneux, vana, fatcat')
@@ -20,7 +20,7 @@ module.exports = {
       const dataMode = args[0]
 
       try {
-        let mode = (MODES.hasOwnProperty(dataMode)) ? dataMode : null
+        let mode = (Object.prototype.hasOwnProperty.call(MODES, dataMode)) ? dataMode : null
 
         const moshedImage = await moshImage(attachment.url, mode)
 

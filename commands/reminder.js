@@ -3,7 +3,7 @@ const BaseMessageEmbed = require('../utils/embeds/base-message-embed')
 module.exports = {
   name: 'remind',
   description: 'Set a reminder to get something done on time!',
-  execute(msg, args) {
+  execute (msg, args) {
     if (args[1] === 'help') {
       const embedHelp = new BaseMessageEmbed()
         .addField('!remind numTime unit "message"', 'Example: !remind 1 h "Let Anna outside!"')
