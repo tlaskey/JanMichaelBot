@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 
-class HelpMessageEmbed extends Discord.MessageEmbed {
+class BaseMessageEmbed extends Discord.MessageEmbed {
   constructor () {
     super()
       .setColor('#34BEBA')
@@ -12,4 +12,4 @@ class HelpMessageEmbed extends Discord.MessageEmbed {
   }
 }
 
-module.exports = HelpMessageEmbed
+module.exports = BaseMessageEmbed

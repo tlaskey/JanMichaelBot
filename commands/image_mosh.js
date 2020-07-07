@@ -1,13 +1,15 @@
 const moshImage = require('../utils/util')
-const HelpMessageEmbed = require('../utils/embeds/help-message-embed')
+const MODES = require('datamosh').MODES
+const ImageMessageEmbed = require('../utils/embeds/image-message-embed')
+const BaseMessageEmbed = require('../utils/embeds/base-message-embed')
 
 module.exports = {
   name: 'dm',
   description: 'Use Datamosh to mosh a lame image into a SCHIFTY pic!',
   async execute (msg, args) {
     if (args[0] === 'help') {
-      const embedHelp = new HelpMessageEmbed()
-        .addField('!dm [mode]', 'modes: blurbobb, schifty, veneneux, vana, fatcat')
+      const embedHelp = new BaseMessageEmbed()
+        .addField('!dm mode', 'modes: blurbobb, schifty, veneneux, vana, fatcat')
 
       return msg.channel.send(embedHelp)
     }
@@ -18,16 +20,16 @@ module.exports = {
       const dataMode = args[0]
 
       try {
-        const moshedImage = await moshImage(attachment.url, dataMode)
+        let mode = (Object.prototype.hasOwnProperty.call(MODES, dataMode)) ? dataMode : null
 
-        const mode = (dataMode === undefined) ? 'random' : dataMode
+        const moshedImage = await moshImage(attachment.url, mode)
 
-        await msg.channel.send(`moshed image in ${mode} mode!`, {
-          files: [{
-            attachment: moshedImage,
-            name: `moshed_${attachment.id}.png`
-          }]
-        })
+        if (!mode) mode = 'random'
+
+        const name = `moshed_${attachment.id}.png`
+        const embed = new ImageMessageEmbed(moshedImage, name).addField('moshed image using', `${mode} mode!`)
+
+        await msg.channel.send(embed)
 
         console.log('File sent!')
 

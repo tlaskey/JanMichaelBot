@@ -1,5 +1,5 @@
 const Board = require('../utils/board')
-const HelpMessageEmbed = require('../utils/embeds/help-message-embed')
+const BaseMessageEmbed = require('../utils/embeds/base-message-embed')
 
 const GLOBAL_BOARDS = new Map()
 
@@ -10,7 +10,6 @@ let lastBoardMessage
 module.exports = {
   name: 'tac',
   description: 'Play a game of Tic Tac Toe!',
-
   async execute (msg, args) {
     if (args[0] === 'start') {
       if (!userStart) {
@@ -108,7 +107,7 @@ module.exports = {
     }
 
     if (args[0] === 'help') {
-      const embedHelp = new HelpMessageEmbed()
+      const embedHelp = new BaseMessageEmbed()
         .addField('!tac start', 'Start a new game of Tic Tac Toe!')
         .addField('!tac accept', 'Accept the challenge and initialize a new game.')
         .addField('!tac move row col', 'Valid moves are from 0-2.')
