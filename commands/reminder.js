@@ -16,7 +16,7 @@ module.exports = {
     const reminderMsg = args[3]
     if (!reminderMsg.startsWith('"') || !reminderMsg.endsWith('"')) return msg.channel.send('Message must be surrounded by "" e.g. "Let the dog out!"')
 
-    const now = require('moment')()
+    const now = require('moment-timezone')().tz('America/Los_Angeles')
     const numTime = args[1]
     const timeUnit = args[2]
     const remindTime = now.add(numTime, timeUnit)
