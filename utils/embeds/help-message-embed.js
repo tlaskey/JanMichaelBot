@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 
 class HelpMessageEmbed extends Discord.MessageEmbed {
-  constructor() {
+  constructor () {
     super()
       .setColor('#34BEBA')
       .setTitle('JanMichaelBot')
