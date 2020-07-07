@@ -16,7 +16,10 @@ module.exports = {
         userStart = msg.author
 
         setTimeout(() => {
-          if (!GLOBAL_BOARDS.has(msg.author.id)) return msg.channel.send('Game has expired. Use !tac start to start a new one.')
+          if (!GLOBAL_BOARDS.has(msg.author.id)) {
+            userStart = undefined
+            return msg.channel.send('Game has expired. Use !tac start to start a new one.')
+          }
         }, 30000)
 
         if (GLOBAL_BOARDS.has(userStart.id)) return msg.channel.send(`<@${userStart.id}> already has a game running!`)
