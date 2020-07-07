@@ -5,18 +5,27 @@ const GLOBAL_BOARDS = new Map()
 
 let userStart
 let userChallenger
+let lastBoardMessage
 
 module.exports = {
   name: 'tac',
   description: 'Play a game of Tic Tac Toe!',
-  execute (msg, args) {
+
+  async execute (msg, args) {
     if (args[0] === 'start') {
       if (!userStart) {
         userStart = msg.author
+
+        setTimeout(() => {
+          if (!GLOBAL_BOARDS.has(msg.author.id)) return msg.channel.send('Game has expired. Use !tac start to start a new one.')
+        }, 30000)
+
         if (GLOBAL_BOARDS.has(userStart.id)) return msg.channel.send(`<@${userStart.id}> already has a game running!`)
+
         return msg.channel.send(`<@${userStart.id}> has started a game of Tic Tac Toe! Who would like to challenge? Use '!tac accept' to start.`)
       } else return msg.channel.send('A game is already being started! Use !tac accept to be second player.')
     }
+
     if (args[0] === 'accept') {
       if (userStart) {
         userChallenger = msg.author
@@ -26,16 +35,29 @@ module.exports = {
 
         msg.channel.send(`<@${userChallenger.id}> has accepted the challenge!`)
 
+        const players = [userStart, userChallenger]
+
+        const firstPlayer = Math.floor(Math.random() * 2)
+        const secondPlayer = firstPlayer === 1 ? 0 : 1
+
+        userStart = players[firstPlayer]
+        userChallenger = players[secondPlayer]
+
         const gameBoard = new Board(userStart.id, userChallenger.id)
         GLOBAL_BOARDS.set(userStart.id, gameBoard)
         GLOBAL_BOARDS.set(userChallenger.id, gameBoard)
 
-        msg.channel.send(`<@${userStart.id}> is X's and goes first! ` + gameBoard.displayBoard())
+        try {
+          lastBoardMessage = await msg.channel.send(`<@${userStart.id}> is X's and goes first! ` + gameBoard.displayBoard())
+        } catch (e) {
+          return msg.channel.send(e.toString())
+        }
 
         userStart = undefined
         userChallenger = undefined
       }
     }
+
     if (args[0] === 'move') {
       let gameBoard
       const user = msg.author
@@ -49,10 +71,9 @@ module.exports = {
         if (isNaN(xPos) || isNaN(yPos)) return msg.channel.send('Invalid argument types. xPos and yPos must be numbers.')
 
         if (gameBoard.playerTurn === user.id) {
-          msg.channel.send('You gave me a move!')
-
           try {
-            msg.channel.send(gameBoard.updateBoard(xPos, yPos, gameBoard.players.get(user.id)))
+            await lastBoardMessage.delete()
+            lastBoardMessage = await msg.channel.send(gameBoard.updateBoard(xPos, yPos, gameBoard.players.get(user.id)))
           } catch (e) {
             return msg.channel.send(e.toString())
           }
@@ -74,6 +95,7 @@ module.exports = {
         } else return msg.channel.send('It is not your turn!')
       } else return msg.channel.send('Invalid arguments. Use \'!tac move [row] [col]\' to make a move.')
     }
+
     if (args[0] === 'quit') {
       if (GLOBAL_BOARDS.has(msg.author.id)) {
         const gameBoard = GLOBAL_BOARDS.get(msg.author.id)
@@ -84,11 +106,12 @@ module.exports = {
         return msg.channel.send('Your game has been stopped!')
       }
     }
+
     if (args[0] === 'help') {
       const embedHelp = new HelpMessageEmbed()
         .addField('!tac start', 'Start a new game of Tic Tac Toe!')
         .addField('!tac accept', 'Accept the challenge and initialize a new game.')
-        .addField('!tac move [row] [col]', 'Valid moves are from 0-2.')
+        .addField('!tac move row col', 'Valid moves are from 0-2.')
         .addField('!tac quit', 'Quit the game. Loser!')
         .addField('!tac help', 'Display commands and their usage.')
 
