@@ -22,7 +22,6 @@ class Board {
 
   getOpponent (userID) {
     for (const id of this.players.keys()) {
-      console.log(id, userID)
       if (id !== userID) return id
     }
   }
