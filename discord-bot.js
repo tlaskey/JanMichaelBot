@@ -1,5 +1,6 @@
 const fs = require('fs')
 const Discord = require('discord.js')
+require('dotenv').config()
 
 const prefix = '!'
 
@@ -32,13 +33,9 @@ client.on('message', (msg) => {
     client.commands.get(command).execute(msg, args)
   } else if (command === 'tac') {
     client.commands.get(command).execute(msg, args)
+  } else if (command === 'iss') {
+    client.commands.get(command).execute(msg, args)
   }
 })
 
-let token
-
-if (process.env.NODE_ENV === 'production') {
-  token = process.env.DISCORD_TOKEN
-} else token = require('./config.json').token
-
-client.login(token)
+client.login(process.env.DISCORD_TOKEN)
