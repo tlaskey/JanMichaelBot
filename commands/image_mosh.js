@@ -9,7 +9,7 @@ module.exports = {
   async execute (msg, args) {
     if (args[0] === 'help') {
       const embedHelp = new BaseMessageEmbed()
-        .addField('!dm mode', 'modes: blurbobb, schifty, veneneux, vana, fatcat')
+        .addField('!dm mode', `modes: ${Object.keys(MODES)}`)
 
       return msg.channel.send(embedHelp)
     }
