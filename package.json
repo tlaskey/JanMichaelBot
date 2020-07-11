@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "cron": "^1.8.2",
-    "datamosh": "^1.4.0",
+    "datamosh": "^1.4.2",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "jimp": "^0.10.0",

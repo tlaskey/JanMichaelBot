@@ -1,4 +1,5 @@
 const ReqiClient = require('reqi')
+const BaseMessageEmbed = require('../utils/embeds/base-message-embed')
 
 module.exports = {
   name: 'iss',
@@ -15,7 +16,9 @@ module.exports = {
 
       if (geoData.body.features === undefined) return await msg.channel.send('Location not found. Must be outta this world...')
 
-      await msg.channel.send(JSON.stringify(geoData.body.features[0]))
+      const embed = new BaseMessageEmbed().addField('ISS Location', JSON.stringify(geoData.body.features[0]))
+
+      await msg.channel.send(embed)
     } catch (e) {
       console.log(e)
     }
