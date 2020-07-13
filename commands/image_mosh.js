@@ -27,7 +27,7 @@ module.exports = {
         if (!mode) mode = 'random'
 
         const name = `moshed_${attachment.id}.png`
-        const embed = new ImageMessageEmbed(moshedImage, name).addField('moshed image using', `${mode} mode!`)
+        const embed = new ImageMessageEmbed(moshedImage, name).addField('Author', `<@${msg.author.id}>`).addField('moshed image using', `${mode} mode!`)
 
         await msg.channel.send(embed)
 
