@@ -17,17 +17,18 @@ module.exports = {
     const attachment = msg.attachments.first()
 
     if (attachment) {
-      const dataMode = args[0]
-
+      let modes = args
       try {
-        let mode = (Object.prototype.hasOwnProperty.call(MODES, dataMode)) ? dataMode : null
+        modes.filter((mode) => Object.prototype.hasOwnProperty.call(MODES, mode))
 
-        const moshedImage = await moshImage(attachment.url, mode)
+        if (modes === undefined || modes.length === 0) modes = null
 
-        if (!mode) mode = 'random'
+        const moshedImage = await moshImage(attachment.url, modes)
+
+        if (!modes) modes = 'random'
 
         const name = `moshed_${attachment.id}.png`
-        const embed = new ImageMessageEmbed(moshedImage, name).addField('Author', `<@${msg.author.id}>`).addField('moshed image using', `${mode} mode!`)
+        const embed = new ImageMessageEmbed(moshedImage, name).addField('Author', `<@${msg.author.id}>`).addField('moshed image using', `${modes} mode!`)
 
         await msg.channel.send(embed)
 
