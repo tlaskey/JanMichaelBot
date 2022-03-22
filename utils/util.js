@@ -3,12 +3,9 @@ const jimp = require('jimp')
 
 const moshImage = async (url, mode) => {
   const read = await jimp.read(url)
-
+  const buffer = await read.getBufferAsync(jimp.MIME_PNG)
   return new Promise((resolve, reject) => {
-    mosh({
-      read: read.bitmap,
-      mode
-    }, (error, data) => {
+    mosh(buffer, mode, (error, data) => {
       if (error) reject(error)
       else {
         resolve(data)
