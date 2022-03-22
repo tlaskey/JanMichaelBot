@@ -31,12 +31,6 @@ client.on('message', (msg) => {
     client.commands.get(command).execute(msg, args)
   } else if (command === 'dm') {
     client.commands.get(command).execute(msg, args)
-  } else if (command === 'tac') {
-    client.commands.get(command).execute(msg, args)
-  } else if (command === 'iss') {
-    client.commands.get(command).execute(msg, args)
-  } else if (command === 'coinflip') {
-    client.commands.get(command).execute(msg, args)
   }
 })
 
