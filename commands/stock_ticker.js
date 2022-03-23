@@ -47,8 +47,8 @@ module.exports = {
       if (!args[1]) {
         return msg.channel.send(
           new BaseMessageEmbed()
-            .setDescription("Incorrect command usage, must supply a ticker symbol")
-            .addField("Example", "!ticker info NVDA")
+            .setDescription('Incorrect command usage, must supply a ticker symbol')
+            .addField('Example', '!ticker info NVDA')
         )
       }
       const ticker = args[1].toUpperCase()
@@ -87,8 +87,8 @@ module.exports = {
     if (!args[0]) {
       return msg.channel.send(
         new BaseMessageEmbed()
-          .setDescription("Incorrect command usage, must supply a ticker symbol")
-          .addField("Example", "!ticker NVDA")
+          .setDescription('Incorrect command usage, must supply a ticker symbol')
+          .addField('Example', '!ticker NVDA')
         )
     }
     const ticker = args[0].toUpperCase()
@@ -131,7 +131,7 @@ module.exports = {
         )
       } else {
         return msg.channel.send(new BaseMessageEmbed()
-          .setDescription("No aggregate data found, check that you're using the correct ticker symbol")
+          .setDescription('No aggregate data found, check that you're using the correct ticker symbol')
           .addField('Ticker', ticker))
       }
     } catch (e) {
