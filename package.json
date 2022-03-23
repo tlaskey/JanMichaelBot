@@ -1,6 +1,6 @@
 {
   "name": "janmichaelbot",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A Discord bot for the JanMichaelVincent Discord Server!",
   "main": "discord-bot.js",
   "scripts": {
