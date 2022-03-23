@@ -43,7 +43,14 @@ module.exports = {
           .addField('Ticker Aggregate Info', '!ticker AAPL 3/22/2021 4/20/2021')
       )
     }
-    if (args[0].toLowerCase() === 'info') {
+    if (args[0] && args[0].toLowerCase() === 'info') {
+      if (!args[1]) {
+        return msg.channel.send(
+          new BaseMessageEmbed()
+            .setDescription("Incorrect command usage, must supply a ticker symbol")
+            .addField("Example", "!ticker info NVDA")
+        )
+      }
       const ticker = args[1].toUpperCase()
       const getURL = `${tickerInfoUrl}${ticker}?apiKey=${apiKey}`
       try {
@@ -77,6 +84,13 @@ module.exports = {
         )
       }
     }
+    if (!args[0]) {
+      return msg.channel.send(
+        new BaseMessageEmbed()
+          .setDescription("Incorrect command usage, must supply a ticker symbol")
+          .addField("Example", "!ticker NVDA")
+        )
+    }
     const ticker = args[0].toUpperCase()
     const start = args[1] ? moment(args[1]).format(dateFormat) : moment().subtract(1, 'days').format(dateFormat)
     const end = args[2] ? moment(args[2]).format(dateFormat) : moment(start).add(1, 'days').format(dateFormat)
@@ -91,11 +105,12 @@ module.exports = {
       }
       const ReqiClient = new Client({ json: true, retry: 2, retryCodes: [429] })
       const limit = moment(end).diff(moment(start), 'days')
-      const description = `Ticker ${ticker} aggregate data for dates between ${start} and ${end} with ${limit} datapoints`
       const getURL = `${aggregateUrl}${ticker}/range/1/day/${start}/${end}?adjusted=true&sort=asc&limit=${limit}&apiKey=${apiKey}`
       const response = await ReqiClient.get(getURL)
       const responseBody = response.body
-      if (responseBody.count === 1) {
+      const dataCount = responseBody.count
+      const description = `Ticker ${ticker} aggregate data for dates between ${start} and ${end} with ${dataCount} datapoints`
+      if (dataCount === 1) {
         const dayHigh = responseBody.results[0].h
         const dayLow = responseBody.results[0].l
         return msg.channel.send(
@@ -104,7 +119,7 @@ module.exports = {
             .addField('High of', dayHigh)
             .addField('Low of', dayLow)
         )
-      } else if (responseBody.count > 1) {
+      } else if (dataCount > 1) {
         const [avgHigh, avgLow, maxDailyHigh, minDailyLow] = calculateData(responseBody)
         return msg.channel.send(
           new BaseMessageEmbed()
