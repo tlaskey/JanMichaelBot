@@ -44,7 +44,7 @@ module.exports = {
       )
     }
     if (args[0].toLowerCase() === 'info') {
-      const ticker = args[1]
+      const ticker = args[1].toUpperCase()
       const getURL = `${tickerInfoUrl}${ticker}?apiKey=${apiKey}`
       try {
         const ReqiClient = new Client({ json: true, retry: 2, retryCodes: [429] })
