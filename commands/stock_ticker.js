@@ -131,7 +131,7 @@ module.exports = {
         )
       } else {
         return msg.channel.send(new BaseMessageEmbed()
-          .setDescription('No aggregate data found, check that you're using the correct ticker symbol')
+          .setDescription("No aggregate data found, check that you're using the correct ticker symbol")
           .addField('Ticker', ticker))
       }
     } catch (e) {
