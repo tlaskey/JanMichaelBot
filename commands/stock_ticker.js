@@ -30,7 +30,7 @@ const convertMarketCap = (nStr) => {
   }
   return x1 + x2
 }
-
+//hello
 module.exports = {
   name: 'ticker',
   description: 'Get stock market ticker data',
