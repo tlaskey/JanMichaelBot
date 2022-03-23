@@ -90,15 +90,11 @@ module.exports = {
         )
       }
       const ReqiClient = new Client({ json: true, retry: 2, retryCodes: [429] })
-      const getURL = `${aggregateUrl}${ticker}/range/1/day/${start}/${end}?adjusted=true&sort=asc&limit=365&apiKey=${apiKey}`
+      const limit = moment(end).diff(moment(start), 'days')
+      const description = `Ticker ${ticker} aggregate data for dates between ${start} and ${end} with ${limit} datapoints`
+      const getURL = `${aggregateUrl}${ticker}/range/1/day/${start}/${end}?adjusted=true&sort=asc&limit=${limit}&apiKey=${apiKey}`
       const response = await ReqiClient.get(getURL)
       const responseBody = response.body
-      let description
-      if (!moment(start).isSame(moment(end))) {
-        description = `Ticker ${ticker} aggregate data for dates between ${start} and ${end}`
-      } else {
-        description = `Ticker ${ticker} aggregate data for ${start}`
-      }
       if (responseBody.count === 1) {
         const dayHigh = responseBody.results[0].h
         const dayLow = responseBody.results[0].l
