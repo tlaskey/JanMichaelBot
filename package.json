@@ -4,7 +4,7 @@
   "description": "A Discord bot for the JanMichaelVincent Discord Server!",
   "main": "discord-bot.js",
   "scripts": {
-    "lint": "echo \"Running Lint...\" && standard --verbose && echo \"Lint Successful!\"",
+    "lint": "echo \"Running Lint...\" && eslint --cache --fix && echo \"Lint Successful!\"",
     "prepare": "husky install"
   },
   "keywords": [
