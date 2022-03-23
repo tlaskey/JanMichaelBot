@@ -30,11 +30,11 @@ const convertMarketCap = (nStr) => {
   }
   return x1 + x2
 }
-// hello
+
 module.exports = {
   name: 'ticker',
   description: 'Get stock market ticker data',
-  async execute(msg, args) {
+  async execute (msg, args) {
     if (args[0] === 'help') {
       return msg.channel.send(
         new BaseMessageEmbed()

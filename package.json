@@ -23,10 +23,18 @@
     "jimp": "^0.10.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.31",
-    "reqi": "^1.0.4",
-    "standard": "^14.3.4"
+    "reqi": "^1.0.4"
   },
   "devDependencies": {
-    "husky": "^7.0.0"
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "husky": "^7.0.0",
+    "lint-staged": "^12.3.7"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix"
   }
 }
