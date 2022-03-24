@@ -31,8 +31,8 @@ client.on('message', (msg) => {
     client.commands.get(command).execute(msg, args)
   } else if (command === 'dm') {
     client.commands.get(command).execute(msg, args)
-  } else if (command === 'ticker') {
-    client.commands.get(command).execute(msg, args)
+  } else if (command === 'ticker' || command === 't') {
+    client.commands.get('ticker').execute(msg, args)
   }
 })
 
