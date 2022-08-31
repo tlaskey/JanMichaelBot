@@ -22,7 +22,7 @@
     "dotenv": "^8.2.0",
     "jimp": "^0.10.0",
     "moment": "^2.29.1",
-    "moment-timezone": "^0.5.31",
+    "moment-timezone": "^0.5.35",
     "reqi": "^1.0.4"
   },
   "devDependencies": {
